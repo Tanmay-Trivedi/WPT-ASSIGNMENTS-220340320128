@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DB Assign 2 Q5</title>
+</head>
+
+<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+<script>
+    $(() => {
+        console.log("Working");
+
+        $("#acno").blur(() => {
+            console.log("Blur Event");
+            let input = { accno: $("#acno").val() };
+            //console.log(input);
+            let parameter = {
+                data: input,
+                url: "http://localhost:900/Accdetails",
+                type: 'get',
+                datatype: "text",
+                success: (datagivenbyserver) => {
+                    if (datagivenbyserver.status == true) { console.log("Success"); }
+                    $("#msg").html(datagivenbyserver.data[0].balance);
+                },
+                error: (datanotfound) => { console.log("Failure"); }
+            };
+            $.ajax(parameter);
+        });
+    });
+</script>
+
+<body> 
+    <br> 
+    <input type="text" id="acno" placeholder="Account No" />
+    <span id="msg"> Balance </span>
+</body>
+
+</html>

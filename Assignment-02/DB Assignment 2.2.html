@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+<script>
+
+    //console.log('is it working');
+
+    $(() => {
+        console.log("working one ");
+
+        // blur event 
+        $("#itemno").blur(() => {
+
+            //contact server, keep the object ready..
+            let input = { itemno: $("#itemno").val() };
+            console.log("Inside blur");
+            let paramter =
+            {
+                data: input,
+                url: "http://localhost:900/Itemdetails",
+                type: 'get',
+                dataType: "json",
+                success: (datagivenbyserver) => {
+                    console.log("data given by server in success " + datagivenbyserver.status)
+                    //ok data is coming from server start doing makeup
+                    if (datagivenbyserver.status == true) {
+
+                        // $("#itemno").val(datagivenbyserver.item.itemno);
+                        $("#itemname").val(datagivenbyserver.item.itemname);
+                        $("#itemprice").val(datagivenbyserver.item.price);
+                        $("#catagory").val(datagivenbyserver.item.catagory);
+                        $('#add').prop('disabled', true);
+                        $("#msg").text("Items Details Found");
+
+                    }
+                    else {
+                        $("#Itemname").val("");
+                        $("#Itemprice").val("");
+                        $("#catagory").val("");
+                        $('#add').prop('disabled', false);
+                        $("#msg").text("Items details Not Found");
+                    }
+                },
+                error: (errorgivenbyserver) => { console.log("failed to contact server " + errorgivenbyserver) }
+            };
+            $.ajax(paramter);
+
+        });
+
+        // add event
+        $("#add").click(() => {
+            console.log("add event ");
+
+            const input1 = {
+                itemno: $("#itemno").val(), itemname: $("#itemname").val(),
+                itemprice: $("#itemprice").val(), catagory: $("#catagory").val()
+            };
+
+            let parameterstothefunction = {
+                data: input1,
+                url: "http://localhost:900/AddItems",
+                type: 'get',
+                dataType: "json",
+                success: (datagivenbyserver) => {
+                    console.log("data given by server in success" + datagivenbyserver.status)
+                    if (datagivenbyserver.status === true) {
+
+                        $("#msg").text("Item Added Successfully");
+                        $('#add').prop('disabled', true);
+
+                    }
+                    else {
+                        $("#msg").text("Items not Added");
+
+                        $('#add').prop('disabled', true);
+
+                    }
+                },
+                error: (errorgivenbyserver) => { console.log("failed to contact server " + errorgivenbyserver) }
+            };
+            $.ajax(parameterstothefunction);
+        });
+
+        // update event
+        $("#update").click(() => {
+
+            const input2 = {
+                itemno: $("#itemno").val(), itemname: $("#itemname").val(),
+                itemprice: $("#itemprice").val(), catagory: $("#catagory").val()
+            };
+
+            let parameterstothefunction = {
+                data: input2,
+                url: "http://localhost:900/UpdateItem",
+                type: 'get',
+                dataType: "json",
+                success: (datagivenbyserver) => {
+                    console.log("data given by server in success" + datagivenbyserver.status)
+                    if (datagivenbyserver.status === true) {
+
+                        $("#msg").text(" Update Item Successful")
+                        $('#add').prop('disabled', true);
+                        $('#update').prop('disabled', true);
+                    }
+                    else {
+                        $("#msg").text(" Not Update ");
+                    }
+                },
+                error: (errorgivenbyserver) => { console.log("failed to contact server " + errorgivenbyserver) }
+            };
+            $.ajax(parameterstothefunction);
+
+        });
+        $("#singleselect").click(() => {
+
+            const input3 = { itemno: $("#itemno").val() };
+
+            let parameterstothefunction = {
+                data: input3,
+                url: "http://localhost:900/SingleSelect",
+                type: 'get',
+                dataType: "json",
+                success: (datagivenbyserver) => {
+                    console.log("data given by server in success" + datagivenbyserver.status)
+                    if (datagivenbyserver.status === true) {
+
+                        $("#msg").text("DAta fetch successfully")
+                        let data = " Item Details <br>" + datagivenbyserver.item.itemno + "  " + datagivenbyserver.item.itemname + "  " + datagivenbyserver.item.price + "  " + datagivenbyserver.item.catagory;
+
+                        $('#display').html(data);
+
+                    }
+                    else {
+                        $("#msg").text(" Not Update ");
+                    }
+                },
+                error: (errorgivenbyserver) => { console.log("failed to contact server " + errorgivenbyserver) }
+            };
+            $.ajax(parameterstothefunction);
+
+        });
+
+        // multiselect
+        $("#multiselect").click(() => {
+
+            const input4 = { catagory: $("#catagory").val() };
+
+            let parameterstothefunction = {
+                data: input4,
+                url: "http://localhost:900/MultiSelect",
+                type: 'get',
+                dataType: "json",
+                success: (datagivenbyserver) => {
+                    console.log("data given by server in success" + datagivenbyserver.status)
+                    if (datagivenbyserver.status === true) {
+
+                        $("#msg").text("Data fetch successfully");
+
+                        $('#display').html(datagivenbyserver.item);
+
+                    }
+                    else {
+                        $("#msg").text(" Not Update ");
+                    }
+                },
+                error: (errorgivenbyserver) => { console.log("failed to contact server " + errorgivenbyserver) }
+            };
+            $.ajax(parameterstothefunction);
+
+
+        });
+
+    });
+</script>
+
+<body>
+    <h3 style="color : cyan">Database Assignment 2<br>Q2: </h3>
+    <hr>
+
+    <input type="text" id="itemno" placeholder="Enter Item No" />
+    <span id="msg"> About Item</span> <br> <br>
+    <input type="text" id="itemname" placeholder="Enter Item Name" /> <br> <br>
+    <input type="text" id="itemprice" placeholder="Enter Price" /><br> <br>
+    <input type="text" id="catagory" placeholder="Enter Catagory" /> <br> <br>
+
+    <button id="add"> Add Item  </button> 
+    <button id="update"> Update Item  </button>
+    <button id="singleselect">Single select  </button>
+    <button id="multiselect"> Multi select  </button>
+    <hr>
+    <p id="display"> Items Details  </p>
+
+
+</body>
+
+</html>

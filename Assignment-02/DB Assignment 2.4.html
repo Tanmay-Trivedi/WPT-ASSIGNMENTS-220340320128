@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Location By pincode</title>
+</head>
+<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+<script>
+    $(() => {
+        console.log("working ");
+
+        // blur event 
+        $("#pin").blur(() => {
+
+            //contact server, keep the object ready..
+            let input = { pin: $("#pin").val() };
+            console.log("Inside blur");
+            let paramter =
+            {
+                data: input,
+                url: "http://localhost:900/Location",
+                type: 'get',
+                dataType: "json",
+                success: (datagivenbyserver) => {
+                    console.log("data given by server in success " + datagivenbyserver.status)
+                    //ok data is coming from server start doing makeup
+                    if (datagivenbyserver.status == true) {
+
+                        $("#location").val(datagivenbyserver.place[0].place);
+                        $('#submit').prop('disabled', true);
+                        $("#msg").text("Location Found");
+                    }
+                    else {
+
+                        $("#msg").text("Location Not Found");
+                    }
+                },
+                error: (errorgivenbyserver) => { console.log("failed to contact server " + errorgivenbyserver) }
+            };
+            $.ajax(paramter);
+
+        });
+    });
+</script>
+
+<body>
+    <h3 style="color : cyan ">Assignment 2<br>Q4: </h3>
+    <input type="text" id="pin" placeholder="Enter Proper pin">
+    <span id="msg"> Show Location</span><br>
+    <input type="text" id="location"> <br>
+    <button id="submit">Submit</button>
+</body>
+
+</html>
