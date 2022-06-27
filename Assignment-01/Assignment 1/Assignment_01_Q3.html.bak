@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Assignment1_3 </title>
+</head>
+<script>
+
+	class ItemStatus {
+		constructor(status, itemobject) {
+			this.status = false;
+			this.itemobject = itemobject;
+		}
+	};
+
+	class ItemData {
+		constructor(itemno, itemprice, qty) {
+			this.itemno = itemno;
+			this.itemprice = itemprice;
+			this.qty = qty;
+		}
+		setItemDetails(itemno, itemprice, qty) {
+			this.itemno = itemno;
+			this.itemprice = itemprice;
+			this.qty = qty;
+		}
+		getItemDetails() {
+			return this.itemno + "--" + this.itemprice + "--" +
+				this.qty;
+		}
+	}
+
+
+	class Logic {
+		constructor() {
+			this.items = [new ItemData(1, 4, 5),
+			new ItemData(2, 6, 7),
+			new ItemData(3, 9, 10),
+			new ItemData(4, 12, 13)]; //assume this is 
+		}
+		getItemDetailsLogic(itemno) {
+			let output = new ItemStatus(false, {});
+			for (let i = 0; i < this.items.length; i++) {
+				if (this.items[i].itemno == itemno) {
+					output.result = true;
+					output.itemdetails = this.items[i];
+					break;
+				}
+			}
+			return output;
+		}
+		updateItemDetailsLogic(updateditem) {
+			console.log(updateditem.itemno);
+			let output = false;
+			for (let i = 0; i < this.items.length; i++) {
+				if (this.items[i].itemno == updateditem.itemno) {
+
+					this.items[i].setItemDetails(updateditem.itemno, updateditem.itemprice, updateditem.qty);
+					output = true;
+					break;
+				}
+			}
+			console.log("inside update function" + output);
+			return output;
+		}
+
+		addItemDetailsLogic(additem) {
+			console.log(additem);
+			let output = false;
+			for (let i = 0; i < this.items.length; i++) {
+				if (this.items[i].itemno == additem.itemno) {
+					output = true;
+					break;
+				}
+			}
+			if (output == false) {
+
+				this.items.push(new Item(additem.itemno, additem.itemprice, additem.qty));
+			}
+			return output;
+		}
+
+		removeItemDetailsLogic(itemno) {
+			let output = false;
+			for (let i = 0; i < this.items.length; i++) {
+				if (this.items[i].itemno == itemno) {
+					this.items.splice(i, 1);
+					output = true;
+					break;
+				}
+
+			}
+			console.log("inside delte function" + output);
+			return output;
+		}
+
+		getAllItems() {
+			return this.items;
+		}
+
+	}//end of the logic class
+
+
+	window.addEventListener('DOMContentLoaded', () => {
+		let logic = new Logic();
+		showAllItems();
+
+		// blur event after entering itemno
+		const itemnoid = document.querySelector("#itemno");
+		itemnoid.addEventListener('blur', () => {
+			console.log("Inside blur event");
+
+			let itemno = document.querySelector("#itemno").value;
+			console.log("input is" + itemno);
+			let output = logic.getItemDetailsLogic(itemno);
+
+			if (output.result) {
+				document.querySelector("#price").value = output.itemdetails.itemprice;
+				document.querySelector("#qty").value = output.itemdetails.qty;
+				document.querySelector("#add").disabled = true;
+				document.querySelector("#update").disabled = false;
+				document.querySelector("#delete").disabled = false;
+				document.querySelector("#clear").disabled = false;
+				document.querySelector("#msg").innerText = "Item Found";
+			}
+			else {
+				document.querySelector("#update").disabled = true;
+				document.querySelector("#add").disabled = false;
+				document.querySelector("#delete").disabled = true;
+				document.querySelector("#clear").disabled = true;
+				document.querySelector("#msg").innerText = "Item not Found";
+			}
+			showAllItems();
+
+		});//end of blur event.
+
+		// add button event
+		const add = document.querySelector("#add");
+		add.addEventListener('click', () => {
+
+			let input = {
+				itemno: document.querySelector("#itemno").value,
+				itemprice: document.querySelector("#price").value,
+				qty: document.querySelector("#qty").value
+			};
+
+			console.log(input); // for checking input
+			let output = logic.addItemDetailsLogic(input);
+
+			if (output == false) {
+				document.querySelector("#msg").innerText = "Added Successfully";
+				document.querySelector("#update").disabled = true;
+				document.querySelector("#delete").disabled = true;
+				document.querySelector("#clear").disabled = true;
+				document.querySelector("#add").disabled = true;
+
+			}
+			else {
+				document.querySelector("#msg").innerText = "Not added";
+				document.querySelector("#update").disabled = true;
+				document.querySelector("#delete").disabled = true;
+				document.querySelector("#clear").disabled = true;
+
+			}
+			showAllItems();
+
+		});// end of add button event
+
+
+		// update button event
+		const update = document.querySelector("#update");
+		update.addEventListener('click', () => {
+
+			let input = {
+				itemno: document.querySelector("#itemno").value,
+				itemprice: document.querySelector("#price").value,
+				qty: document.querySelector("#qty").value
+			};
+
+			let output = logic.updateItemDetailsLogic(input);
+
+			if (output) {
+				document.querySelector("#msg").innerText = "Update SuccessFully";
+				document.querySelector("#update").disabled = true;
+				document.querySelector("#delete").disabled = true;
+				document.querySelector("#clear").disabled = true;
+
+			}
+			else {
+				document.querySelector("#msg").innerText = "Not Update";
+				document.querySelector("#update").disabled = true;
+				document.querySelector("#delete").disabled = true;
+				document.querySelector("#clear").disabled = true;
+
+			}
+			showAllItems();
+
+		}); // end of update button event
+
+
+		// event on update button
+		const deletebutton = document.querySelector("#delete");
+		deletebutton.addEventListener('click', () => {
+
+			let input = document.querySelector("#itemno").value;
+			let output = logic.removeItemDetailsLogic(input);
+
+			if (output) {
+				document.querySelector("#update").disabled = true;
+				document.querySelector("#delete").disabled = true;
+				document.querySelector("#clear").disabled = true;
+				document.querySelector("#msg").innerText = "Item deleted SuccessFul";
+
+			}
+			else {
+				document.querySelector("#update").disabled = true;
+				document.querySelector("#delete").disabled = true;
+				document.querySelector("#clear").disabled = true;
+				document.querySelector("#msg").innerText = "Item not Delted";
+			}
+			showAllItems();
+
+		}); // end of update button event
+
+
+		// event on clear button
+		const clear = document.querySelector("#clear");
+		clear.addEventListener('click', () => {
+
+			document.querySelector("#update").disabled = true;
+			document.querySelector("#delete").disabled = true;
+			document.querySelector("#clear").disabled = true;
+			document.querySelector("#add").disabled = true;
+			document.querySelector("#itemno").value = "";
+			document.querySelector("#price").value = "";
+			document.querySelector("#qty").value = "";
+		});//end of clear button evnet
+
+
+
+		function showAllItems() {
+			console.log("show all items");
+			let output = logic.getAllItems();
+
+			let message = "";
+			for (let i = 0; i < output.length; i++)
+				message += "<Br/>" + output[i].itemno + " --- " + output[i].itemprice +
+					" --- " + output[i].qty;
+
+			document.querySelector("#contents").innerHTML = message;
+
+		}
+
+	});
+
+</script>
+<style>
+</style>
+</head>
+
+<body>
+	<h1 style="color: red;">Assignment1_3 </h1>
+	<hr />
+	<input type="text" id="itemno" placeholder="itemno " /> <span id="msg"> What happen to the array </span>
+	<Br /><input type="text" id="price" placeholder="price " />
+	<Br /><input type="text" id="qty" placeholder="qty " />
+	<Br /><button id="add" disabled> Add_Item</button>
+	<button id="update" disabled> Update_Item</button>
+	<button id="delete" disabled> Delete_Item</button>
+	<button id="clear" disabled> clear</button>
+	<hr />
+	<p id="contents"> we can show details here </p>
+</body>
+
+</html>

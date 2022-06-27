@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assignment1_2 </title>
+</head>
+<script>
+
+    const employee = [{ empno: 11, empname: "Sushant", email: "abc@gmail.com", deptid: 1001 },
+    { empno: 12, empname: "Tanmay", email: "def@gmail.com", deptid: 1002 },
+    { empno: 13, empname: "Sumit", email: "ghi@gmail.com", deptid: 1003 },
+    { empno: 14, empname: "Uzma", email: "jkl@gmail.com", deptid: 1004 }];
+
+
+    window.addEventListener('DOMContentLoaded', () => {
+        console.log("We are inside the console");
+
+        // to add blur event on empno we select by id
+        const eno = document.querySelector("#empno");
+        eno.addEventListener('blur', () => {
+            console.log("blur event");
+            let empno = document.querySelector("#empno").value;
+            console.log("Empno is " + empno);
+            let output = serchinemp(empno);
+
+            console.log(output);
+
+            if (output.result) {
+                document.querySelector("#modify").disabled = false;
+                document.querySelector("#remove").disabled = false;
+                document.querySelector("#viewall").disabled = false;
+                document.querySelector("#viewonid").disabled = false;
+                document.querySelector("#empname").value = output.empdetails.empname
+                document.querySelector("#email").value = output.empdetails.email
+                document.querySelector("#deptid").value = output.empdetails.deptid
+                document.querySelector("#msg").innerText = "Empno Found in Array";
+            } else {
+                document.querySelector("#msg").innerText = "Empno Not Found in Array";
+                document.querySelector("#add").disabled = false;
+                document.querySelector("#empname").value = "";
+                document.querySelector("#email").value = "";
+                document.querySelector("#deptid").value = "";
+
+            }
+            showAll();
+
+        }); // blur event end here.
+
+        // add button event
+        const add = document.querySelector("#add");
+        add.addEventListener('click', () => {
+            console.log("inside click event");
+
+            let input = {
+                empid: document.querySelector("#empno").value, empname: document.querySelector("#empname").value,
+                email: document.querySelector("#email").value, deptid: document.querySelector("#deptid").value
+            };
+
+            console.log(input);
+
+            employee.push(input);
+            console.log(employee);
+            document.querySelector("#add").disabled = true;
+            document.querySelector("#msg").innerHTML = "Employee Added Successfully";
+            document.querySelector("#viewall").disabled = false;
+            document.querySelector("#viewonid").disabled = false;
+            showAll();
+
+        });// end of add event.
+
+
+        // Modify button event 
+        let modify = document.querySelector("#modify");
+        modify.addEventListener('click', () => {
+
+            let empno = document.querySelector("#empno").value; // search again present or not in array
+            console.log("Empno is " + empno);
+            let output = serchinemp(empno);
+            if (output.result) {
+
+                output.empdetails.empname = document.querySelector("#empname").value
+                output.empdetails.email = document.querySelector("#email").value
+                output.empdetails.deptid = document.querySelector("#deptid").value
+                document.querySelector("#msg").innerHTML = "Employee Details Modified Successfully";
+                document.querySelector("#modify").disabled = false;
+                document.querySelector("#remove").disabled = false;
+                document.querySelector("#viewall").disabled = false;
+                document.querySelector("#viewonid").disabled = false;
+
+            }
+            else {
+                document.querySelector("#msg").innerText = "Wrong Employee no ";
+            }
+            showAll()
+
+        });// end of modify button event
+
+
+        // Remove event 
+
+
+        let remove = document.querySelector("#remove");
+        remove.addEventListener('click', () => {
+
+            let empno = document.querySelector("#empno").value;
+            for (let i = 0; i < employee.length; i++) {
+                if (employee[i].empno == empno) {
+                    employee.splice(i, 1);
+                    document.querySelector("#empname").value = "";
+                    document.querySelector("#email").value = "";
+                    document.querySelector("#deptid").value = "";
+                    document.querySelector("#msg").innerHTML = "Emplye details is Deleted Successfully";
+                    document.querySelector("#viewall").disabled = false;
+                    document.querySelector("#viewonid").disabled = false;
+                    break;
+                }
+                else {
+                    document.querySelector("#msg").innerText = "Employee not found ";
+                }
+            }
+            showAll();
+
+        }); // end of remove event
+
+        // view all button event
+        let veiw = document.querySelector("#viewall");
+        veiw.addEventListener('click', () => {
+            let view = [];
+            for (let i = 0; i < employee.length; i++) {
+                view[i] = " <br> " + employee[i].empno + "  " + employee[i].empname + "  " + employee[i].email + "  " + employee[i].deptid + "<br>";
+            }
+            document.querySelector("#content").innerHTML = "<h3> Employee Details </h3> " + view;
+
+
+        }); // end of viewall button event
+
+        // viewonid button event
+        let veiwonid = document.querySelector("#viewonid");
+        veiwonid.addEventListener('click', () => {
+            let id = document.querySelector("#deptid").value;
+            let view = [];
+            for (let i = 0; i < employee.length; i++) {
+                if (employee[i].deptid == id) {
+                    view[i] = " <br> " + employee[i].empno + "  " + employee[i].empname + "  " + employee[i].email + "  " + employee[i].deptid + "<br>";
+
+                }
+            }
+            document.querySelector("#content").innerHTML = "<h3> Employee Details of deptid </h3> " + view;
+
+
+        }); // end of viewall button event
+
+
+
+        // employee search function
+        function serchinemp(empnum) {
+            let output = { result: false, empdetails: {} };
+            for (let i = 0; i < employee.length; i++) {
+                if (employee[i].empno == empnum) {
+                    output.result = true;
+                    output.empdetails = employee[i];
+                    console.log("inside search");
+                    console.log(output.empdetails);
+                    break;
+                }
+
+            }
+            return output;
+        }
+
+        // Display employee details function
+        function showAll() {
+            let content = [];
+            for (let i = 0; i < employee.length; i++) {
+                content[i] = "<br>  " + employee[i].empno + " -- " + employee[i].empname + " -- " + employee[i].email + " -- " + employee[i].deptid
+            }
+            console.log(content);
+            document.querySelector("#content").innerHTML = content;
+        }
+    });
+
+</script>
+
+<body>
+    <h1 style="color: red;">Assignment1_2 </h1>
+    <hr>
+    <p>EmpNo : <input type="text" id="empno" placeholder="Enter Empno"> <span id="msg">Enter valid details</span></p>
+
+    <p>EmpName : <input type="text" id="empname" placeholder="Enter Name"></p>
+
+    <p>Emp EmailId : <input type="email" id="email" placeholder="Enter valid email"></p>
+
+    <p>EmpId : <input type="text" id="deptid" placeholder="Enter valid  Dept ID"></p>
+
+    <button id="add" disabled>Add</button>
+    <button id="modify" disabled>Modify</button>
+    <button id="remove" disabled>Remove</button>
+    <button id="viewall" disabled> View All</button>
+    <button id="viewonid" disabled> View On ID</button>
+    <hr>
+    <p id="content"> We can show output here. </p>
+</body>
+
+</html>

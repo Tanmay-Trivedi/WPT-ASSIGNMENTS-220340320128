@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assignment1_1</title>
+</head>
+<script>
+    const array = [1, 11, 22, 33, 44, 55, 66, 77, 88, 99];
+    window.addEventListener('DOMContentLoaded', () => {
+
+        console.log(array);
+
+
+        const no = document.querySelector("#num");
+        no.addEventListener('blur', () => {
+            console.log("Blur Event");
+
+
+            let nos = document.querySelector("#num").value;
+            console.log("input is" + nos);// for checking work or not
+            //console.log(array.find(found));
+            function found(f) {
+                console.log("inside function");
+                return f == nos;
+            }
+
+            //let output = result(nos);
+            //console.log(output); 
+            if (array.find(found) == nos) {
+                console.log("inside the if part");
+                document.querySelector("#edit").disabled = false;
+                document.querySelector("#delete").disabled = false;
+                document.querySelector("#add").disabled = true;
+                document.querySelector("#viewall").disabled = false;
+                document.querySelector("#odd").disabled = false;
+                document.querySelector("#msg").innerText = "Number Found in Array";
+            }
+            else {
+                console.log("inside the else part");
+                document.querySelector("#add").disabled = false;
+                document.querySelector("#msg").innerText = "Number not Found in Array";
+            }
+
+        });//  serching element in array
+
+        //   Add button event
+        const add = document.querySelector("#add");
+        add.addEventListener('click', () => {
+            console.log("inside add button");
+            let input = document.querySelector("#num").value;
+            //console.log(array.find(found));
+            function found(f) {
+                console.log("inside function");
+                return f == input;
+            }
+
+
+
+            if (array.find(found) == input) {
+                document.querySelector("#edit").disabled = true;
+                document.querySelector("#delete").disabled = true;
+                document.querySelector("#add").disabled = true;
+                document.querySelector("#viewall").disabled = false;
+                document.querySelector("#odd").disabled = false;
+                document.querySelector("#msg").innerText = "Number Allready Present";
+
+            } else {
+                array.push(input);
+                console.log(array);
+                document.querySelector("#edit").disabled = true;
+                document.querySelector("#delete").disabled = true;
+                document.querySelector("#add").disabled = true;
+                document.querySelector("#viewall").disabled = false;
+                document.querySelector("#odd").disabled = false;
+                document.querySelector("#msg").innerText = "Number Add Successfully";
+            }
+
+
+        }); // end add button
+
+        // Edit button Event
+        const edit = document.querySelector("#edit");
+        edit.addEventListener('click', () => {
+            console.log("inside edit button");
+            let ipfromprompt = prompt("Enter the number ");
+            //console.log("promt input is "+input);
+            //console.log(array.find(found));
+            function found(f) {
+                console.log("inside function");
+                return f == ipfromprompt;
+            }
+            if (array.find(found) != ipfromprompt) {
+                array.push(ipfromprompt);
+                console.log(array);
+
+            } else {
+                console.log("Number is allready present");
+            }
+
+        });// end edit button
+
+        // delete button Event
+        const dele = document.querySelector("#delete");
+        dele.addEventListener('click', () => {
+            console.log("inside delete button");
+            let input = document.querySelector("#num").value;
+            function found(f) {
+                console.log("inside function");
+                return f == input;
+            }
+
+            for (let i = 0; i < array.length; i++) {
+                console.log("inside for");
+                if (array[i] == input) {
+                    console.log("inside if");
+                    array.splice(i, 1); // which position, how many elements to remove
+                    console.log(array);
+                    document.querySelector("#msg").innerText = "number Removed";
+                    break;
+                }
+
+            }
+
+        });// end delete button
+
+        // view all button
+        const viewall = document.querySelector("#viewall");
+        viewall.addEventListener('click', () => {
+            console.log("inside view all button");
+            let msg = "";
+            for (let i = 0; i < array.length; i++) 
+                msg += array[i] + "  ";
+            document.querySelector("#contents").innerText = msg;
+        }); // end view all button
+
+        // show odd 
+        const odd = document.querySelector("#odd");
+        odd.addEventListener('click', () => {
+            console.log("inside odd button");
+            let msg = "";
+            for (let i = 0; i < array.length; i++) {
+                if (i % 2 != 0)
+                    msg += array[i] + "  ";
+            }
+            document.querySelector("#contents").innerText = msg;
+        }); // end odd all button
+
+
+
+
+
+
+        function result(nos) {
+            let res = false;
+            for (let i = 0; i < array.length; i++) {
+                if (array[i] === nos) {
+                    console.log("number found");
+                    res = true;
+                    break;
+                }
+            }
+            return res;
+        }
+        function resultforupdate(input) {
+            let res = false;
+            for (let i = 0; i < array.length; i++) {
+                if (array[i] === input) {
+                    console.log("number found");
+                    res = true;
+                    break;
+                }
+            }
+            return res;
+        }
+
+
+    });
+
+</script>
+
+<body>
+    <h1 style="color: cyan;">Assignment 1:<br> Q1 </h1>
+    <hr>
+    <input type="text" id="num" placeholder="Enter a valid number"> <span id="msg">Number</span>
+    <br><br>
+    <button id="add" disabled> Add </button>
+    <button id="edit" disabled> Edit </button>
+    <button id="delete" disabled> Delete </button>
+    <button id="viewall" disabled> View All </button>
+    <button id="odd" disabled>View Odd Position </button>
+    <hr />
+    <p id="contents"> We can Show content here </p>
+</body>
+
+</html>
