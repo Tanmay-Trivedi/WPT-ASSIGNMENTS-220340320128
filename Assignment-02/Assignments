@@ -1,0 +1,31 @@
+Assignment - 02 
+
+Q1.	Theory: 
+
+a.	Install mysql2 package.
+  b.	Prove db connection works.
+  c.	Then start your code
+  i.	Don’t think look at the examples we have written in the class and copy paste. And not modify my code..
+
+Q2.	Create a table called  item with itemno integer  primary key, itemname varchar(15), price integer, category varchar(15)
+a.	Demonstrate 
+  i.	Insert
+  ii.	Update  -- category and price
+  iii.	Multi select – query on category
+  iv.	Single select  -- query on itemno.
+
+Q3.	Create a table called  resource with resource id integer, primary key, resourcename varchar(15), status boolean
+a.	Demonstrate 
+  i.	Insert
+  ii.	Update  -- category and price
+  iii.	Multi select – query on status
+  iv.	Single select  -- query on resourceid.	
+
+Q4.	Build a complete UI by using jquery on presentation, real server side with database where scenario is very simple, if we give pincode, areaname should appear.
+  a.	In one textbox we type pincode, when blur event occurs show the area name next to the pincode textbox.
+
+Q5.	Change the donkeys name
+  a.	Build a complete UI by using jquery on presentation, real server side with database where scenario is very simple, if we give acno, balance should appear.
+  b.	In one textbox we type accno, when blur event occurs show the balance, should appear  next to the acno textbox.
+
+Q6.	Poets will not complete 4 and 5, to systematically  --look at the mind map
